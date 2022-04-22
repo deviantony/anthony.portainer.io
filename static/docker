@@ -71,11 +71,11 @@ apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
 
 success "Docker installed"
 
-info "Adding ${USER} to docker group"
+info "Adding ${SUDO_USER} to docker group"
 
-usermod -aG docker ${USER}
+usermod -aG docker ${SUDO_USER}
 
-success "${USER} added to docker group"
+success "${SUDO_USER} added to docker group"
 
 printSection "Installing Portainer"
 
