@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# Install Docker + Portainer on Ubuntu
-# Must run with sudo
+# Install Docker, Compose and Portainer on Ubuntu
+# Must run with sudo privileges
 
 set -e
 
@@ -37,18 +37,18 @@ errorAndExit() {
 
 # !logging
 
-if [[ "$EUID" -ne 0 ]]; then
-    errorAndExit "Please run this script with sudo privileges."
+if [[ $(id -u) -ne 0 ]]; then
+  errorAndExit "Please run this script with sudo privileges."
 fi
 
 printSection "Installing Docker"
 info "Installing Docker prerequisites"
 
 apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
-    ca-certificates \
-    curl \
-    gnupg \
-    lsb-release
+  ca-certificates \
+  curl \
+  gnupg \
+  lsb-release
 
 success "System updated"
 
@@ -57,36 +57,48 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/
 info "Setting up Docker apt repo"
 
 echo \
-    "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-    $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 success "System updated"
 
 info "Installing Docker"
 
 apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
-    docker-ce \
-    docker-ce-cli \
-    containerd.io
+  docker-ce \
+  docker-ce-cli \
+  containerd.io
 
 success "Docker installed"
 
-info "Adding ${SUDO_USER} to docker group"
+if [[ -n ${SUDO_USER} ]]; then
+  info "Adding ${SUDO_USER} to docker group"
 
-usermod -aG docker ${SUDO_USER}
+  usermod -aG docker ${SUDO_USER}
 
-success "${SUDO_USER} added to docker group"
+  success "${SUDO_USER} added to docker group"
+fi
+
+printSection "Installing Compose"
+
+USER_HOME=$(getent passwd ${SUDO_USER:-$USER} | cut -d: -f6)
+
+mkdir -p "${USER_HOME}/.docker/cli-plugins/" && \
+  curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -o "${USER_HOME}/.docker/cli-plugins/docker-compose" && \
+  chmod +x "${USER_HOME}/.docker/cli-plugins/docker-compose"
+
+success "Compose installed"
 
 printSection "Installing Portainer"
 
 docker run -d \
-    -p 9443:9443 \
-    -p 8000:8000 \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    -v portainer_data:/data \
-    --restart=always \
-    --name portainer \
-    portainer/portainer-ee:latest
+  -p 9443:9443 \
+  -p 8000:8000 \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v portainer_data:/data \
+  --restart=always \
+  --name portainer \
+  portainer/portainer-ee:latest
 
 success "Portainer deployed"
 
