@@ -44,8 +44,8 @@ fi
 printSection "Installing vps binary"
 info "Dowloading and installing binary"
 
-curl -L https://github.com/deviantony/go-workbench/releases/download/latest/vps-linux-amd64 -o /usr/local/bin/vps
-chmod u+x /usr/local/bin/vps
+curl -L https://github.com/deviantony/anthony.portainer.io/releases/download/bin/vps-linux-amd64 -o /usr/local/bin/vps
+chmod 755 /usr/local/bin/vps
 
 success "vps binary successfully installed"
 
