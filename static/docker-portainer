@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+# Install latest Portainer BE server on top of a Docker installation (see docker script)
+# Must run with sudo privileges
+
+set -e
+
+# logging
+
+ESeq="\x1b["
+RCol="$ESeq"'0m'
+BIRed="$ESeq"'1;91m'
+BIGre="$ESeq"'1;92m'
+BIYel="$ESeq"'1;93m'
+BIWhi="$ESeq"'1;97m'
+
+printSection() {
+  echo -e "${BIYel}>>>> ${BIWhi}${1}${RCol}"
+}
+
+info() {
+  echo -e "${BIWhi}${1}${RCol}"
+}
+
+success() {
+  echo -e "${BIGre}${1}${RCol}"
+}
+
+error() {
+  echo -e "${BIRed}${1}${RCol}"
+}
+
+errorAndExit() {
+  echo -e "${BIRed}${1}${RCol}"
+  exit 1
+}
+
+# !logging
+
+if [[ $(id -u) -ne 0 ]]; then
+  errorAndExit "Please run this script with sudo privileges."
+fi
+
+printSection "Installing Docker via script"
+
+curl https://anthony.portainer.io/docker | bash
+
+printSection "Installing Portainer"
+
+docker run -d \
+  -p 9443:9443 \
+  -p 8000:8000 \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v portainer_data:/data \
+  --restart=always \
+  --name portainer \
+  portainer/portainer-ee:latest
+
+success "Portainer deployed"
+
+exit 0

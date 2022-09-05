@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Install Docker, Compose and Portainer on Ubuntu
+# Install Docker and Compose on Ubuntu
 # Must run with sudo privileges
 
 set -e
@@ -67,7 +67,8 @@ info "Installing Docker"
 apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
   docker-ce \
   docker-ce-cli \
-  containerd.io
+  containerd.io \
+  docker-compose-plugin
 
 success "Docker installed"
 
@@ -78,28 +79,5 @@ if [[ -n ${SUDO_USER} ]]; then
 
   success "${SUDO_USER} added to docker group"
 fi
-
-printSection "Installing Compose"
-
-USER_HOME=$(getent passwd ${SUDO_USER:-$USER} | cut -d: -f6)
-
-mkdir -p "${USER_HOME}/.docker/cli-plugins/" && \
-  curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -o "${USER_HOME}/.docker/cli-plugins/docker-compose" && \
-  chmod +x "${USER_HOME}/.docker/cli-plugins/docker-compose"
-
-success "Compose installed"
-
-printSection "Installing Portainer"
-
-docker run -d \
-  -p 9443:9443 \
-  -p 8000:8000 \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  -v portainer_data:/data \
-  --restart=always \
-  --name portainer \
-  portainer/portainer-ee:latest
-
-success "Portainer deployed"
 
 exit 0
