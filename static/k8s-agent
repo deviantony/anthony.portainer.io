@@ -54,6 +54,8 @@ success "Portainer agent deployed"
 
 info "Waiting for Portainer agent to be ready"
 
+microk8s kubectl wait deployment/portainer-agent -n portainer --for condition=available --timeout=90s 
+
 microk8s kubectl wait pods -n portainer --for condition=Ready -l app=portainer-agent --timeout 90s
 
 success "Portainer agent is ready"
