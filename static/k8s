@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+# Install Kubernetes on Ubuntu via microk8s
+# Must run with sudo privileges
+
+set -e
+
+# logging
+
+ESeq="\x1b["
+RCol="$ESeq"'0m'
+BIRed="$ESeq"'1;91m'
+BIGre="$ESeq"'1;92m'
+BIYel="$ESeq"'1;93m'
+BIWhi="$ESeq"'1;97m'
+
+printSection() {
+  echo -e "${BIYel}>>>> ${BIWhi}${1}${RCol}"
+}
+
+info() {
+  echo -e "${BIWhi}${1}${RCol}"
+}
+
+success() {
+  echo -e "${BIGre}${1}${RCol}"
+}
+
+error() {
+  echo -e "${BIRed}${1}${RCol}"
+}
+
+errorAndExit() {
+  echo -e "${BIRed}${1}${RCol}"
+  exit 1
+}
+
+# !logging
+
+if [[ $(id -u) -ne 0 ]]; then
+  errorAndExit "Please run this script with sudo privileges."
+fi
+
+printSection "Installing microk8s"
+info "Installing via snap"
+
+snap install microk8s --classic --channel=1.25
+
+success "Installation complete"
+
+if [[ -n ${SUDO_USER} ]]; then
+  info "Adding ${SUDO_USER} to microk8s group"
+
+  usermod -a -G microk8s ${SUDO_USER}
+  chown -f -R ${SUDO_USER} ~/.kube
+
+  success "${SUDO_USER} added to microk8s group"
+fi
+
+info "Waiting for microk8s to be ready"
+
+microk8s status --wait-ready
+
+info "microk8s is ready"
+
+exit 0
