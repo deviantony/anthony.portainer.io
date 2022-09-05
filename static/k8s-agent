@@ -52,4 +52,10 @@ microk8s kubectl apply -f https://raw.githubusercontent.com/portainer/k8s/master
 
 success "Portainer agent deployed"
 
+info "Waiting for Portainer agent to be ready"
+
+microk8s kubectl wait pods -n portainer --for condition=Ready -l app=portainer-agent --timeout 90s
+
+success "Portainer agent is ready"
+
 exit 0
