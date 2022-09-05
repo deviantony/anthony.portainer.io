@@ -57,10 +57,22 @@ if [[ -n ${SUDO_USER} ]]; then
   success "${SUDO_USER} added to microk8s group"
 fi
 
-info "Waiting for microk8s to be ready"
+info "Waiting for microk8s to be ready..."
 
 microk8s status --wait-ready
 
-info "microk8s is ready"
+success "microk8s is ready"
+
+info "Enabling addons"
+
+microk8s enable dns storage rbac
+
+success "Addons enabled"
+
+info "Installing helm"
+
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+success "Helm installed"
 
 exit 0
