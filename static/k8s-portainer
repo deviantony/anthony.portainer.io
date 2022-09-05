@@ -53,7 +53,7 @@ helm repo update
 
 info "Installing Portainer"
 
-helm install --create-namespace -n portainer portainer portainer/portainer \
+microk8s helm install --create-namespace -n portainer portainer portainer/portainer \
     --set enterpriseEdition.enabled=true \
     --set tls.force=true
 
