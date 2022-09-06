@@ -65,7 +65,7 @@ success "microk8s is ready"
 
 info "Enabling addons"
 
-microk8s enable dns storage rbac
+microk8s enable dns hostpath-storage rbac
 
 success "Addons enabled"
 
@@ -74,5 +74,13 @@ info "Installing helm"
 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
 success "Helm installed"
+
+info "Creating aliases"
+
+echo "alias k='microk8s kubectl'" >> ~/.bash_aliases
+echo "alias h='microk8s helm3'" >> ~/.bash_aliases
+source ~/.bash_aliases
+
+success "Aliases created"
 
 exit 0
