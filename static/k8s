@@ -79,7 +79,6 @@ info "Creating aliases"
 
 echo "alias k='microk8s kubectl'" >> ~/.bash_aliases
 echo "alias h='microk8s helm3'" >> ~/.bash_aliases
-source ~/.bash_aliases
 
 success "Aliases created"
 

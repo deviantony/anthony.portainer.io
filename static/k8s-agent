@@ -44,6 +44,7 @@ fi
 printSection "Installing Kubernetes via script"
 
 curl https://anthony.portainer.io/k8s | bash
+source ~/.bash_aliases
 
 printSection "Installing Portainer agent (via manifest)"
 info "Installing Portainer agent"
