@@ -41,6 +41,8 @@ if [[ $(id -u) -ne 0 ]]; then
   errorAndExit "Please run this script with sudo privileges."
 fi
 
+info "Edge device setup script v1.0.0"
+
 printSection "Installing Docker via script"
 
 curl https://anthony.portainer.io/docker | bash
