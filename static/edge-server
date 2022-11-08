@@ -41,7 +41,7 @@ if [[ $(id -u) -ne 0 ]]; then
   errorAndExit "Please run this script with sudo privileges."
 fi
 
-info "Edge server setup script v1.0.0"
+info "Edge server setup script v1.0.1"
 
 printSection "Installing system requirements"
 
