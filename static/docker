@@ -67,6 +67,8 @@ success "System updated"
 
 info "Installing Docker"
 
+sleep 5
+
 apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
   docker-ce \
   docker-ce-cli \
