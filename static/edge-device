@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# Install latest Portainer BE server on top of a Docker installation (see docker script)
+# Install latest Portainer agent as a Portainer Edge Agent on top of a Docker installation (see docker script)
+# Requires EDGE_KEY environment variable to be set on the device
 # Must run with sudo privileges
 
 set -e

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # Install latest Portainer BE server on top of a Docker installation (see docker script)
+# Also configures the Portainer instance to acts as an Edge server
 # Must run with sudo privileges
 
 set -e
