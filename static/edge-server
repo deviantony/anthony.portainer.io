@@ -84,6 +84,8 @@ printSection "Configuring Portainer"
 
 sleep 3
 
+password="deac736b-12f0-418b-ba3e-8a98867b58c5"
+
 jwt=$(http --ignore-stdin --verify=no POST \
   "https://localhost:9443/api/auth" \
   username="admin" \
@@ -99,7 +101,8 @@ ip_addr=$(ip route get 1.2.3.4 | awk '{printf "%s" , $7 }')
 http --ignore-stdin --quiet --verify=no PUT \
   "https://localhost:9443/api/settings" \
   "Authorization: Bearer ${jwt}" \
-  EdgePortainerURL="https://${ip_addr}:9443"
+  EdgePortainerURL="https://${ip_addr}:9443" \
+  TrustOnFirstConnect:="true"
 
 edge_key=$(http --ignore-stdin --verify=no POST \
   "https://localhost:9443/api/endpoints/edge/generate-key" \
