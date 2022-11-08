@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+
+# Install latest Portainer BE server on top of a Docker installation (see docker script)
+# Must run with sudo privileges
+
+set -e
+
+# logging
+
+ESeq="\x1b["
+RCol="$ESeq"'0m'
+BIRed="$ESeq"'1;91m'
+BIGre="$ESeq"'1;92m'
+BIYel="$ESeq"'1;93m'
+BIWhi="$ESeq"'1;97m'
+
+printSection() {
+  echo -e "${BIYel}>>>> ${BIWhi}${1}${RCol}"
+}
+
+info() {
+  echo -e "${BIWhi}${1}${RCol}"
+}
+
+success() {
+  echo -e "${BIGre}${1}${RCol}"
+}
+
+error() {
+  echo -e "${BIRed}${1}${RCol}"
+}
+
+errorAndExit() {
+  echo -e "${BIRed}${1}${RCol}"
+  exit 1
+}
+
+# !logging
+
+if [[ $(id -u) -ne 0 ]]; then
+  errorAndExit "Please run this script with sudo privileges."
+fi
+
+printSection "Installing system requirements"
+
+curl -SsL https://packages.httpie.io/deb/KEY.gpg | apt-key add -
+curl -SsL -o /etc/apt/sources.list.d/httpie.list https://packages.httpie.io/deb/httpie.list
+
+apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
+  uuid-runtime \
+  httpie \
+  jq
+
+printSection "Installing Docker via script"
+
+sleep 5
+
+curl https://anthony.portainer.io/docker | bash
+
+printSection "Generating Portainer admin password"
+
+password=$(uuidgen)
+
+echo -n ${password} > /tmp/portainer_password
+
+printSection "Installing Portainer"
+
+docker run -d \
+  -p 9443:9443 \
+  -p 8000:8000 \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v portainer_data:/data \
+  -v /tmp/portainer_password:/tmp/portainer_password \
+  --restart=always \
+  --name portainer \
+  portainer/portainer-ee:latest \
+  --edge-compute \
+  --host unix:///var/run/docker.sock \
+  --admin-password-file /tmp/portainer_password
+
+success "Portainer deployed"
+
+printSection "Configuring Portainer"
+
+sleep 3
+
+jwt=$(http --verify=no POST \
+  "https://localhost:9443/api/auth" \
+  username="admin" \
+  password="${password}" | jq -r '.jwt')
+
+api_token=$(http --verify=no POST \
+  "https://localhost:9443/api/users/1/tokens" \
+  "Authorization: Bearer ${jwt}" \
+  description="edge-server-bootstrap-token" | jq -r '.rawAPIKey')
+
+ip_addr=$(ip route get 1.2.3.4 | awk '{printf "%s" , $7 }')
+
+http --quiet --verify=no PUT \
+  "https://localhost:9443/api/settings" \
+  "Authorization: Bearer ${jwt}" \
+  EdgePortainerURL="https://${ip_addr}:9443"
+
+edge_key=$(http --verify=no POST \
+  "https://localhost:9443/api/endpoints/edge/generate-key" \
+  "Authorization: Bearer ${jwt}" | jq -r '.edgeKey')
+
+success "Portainer successfully configured"
+
+info "\n"
+info "Use the following URL to access the Portainer instance:\n"
+info "https://{ip_addr}:9443"
+info "Portainer password: ${password}"
+info "\n"
+
+info "Use the following command to onboard a device to this instance:\n"
+info "export EDGE_KEY=${edge_key} && curl https://anthony.portainer.io/edge-device | bash"
+info "\n"
+
+exit 0
