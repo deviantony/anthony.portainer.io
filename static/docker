@@ -44,7 +44,7 @@ fi
 printSection "Installing Docker"
 info "Installing Docker prerequisites"
 
-apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
+apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::Lock::Timeout=60 install -yq \
   ca-certificates \
   curl \
   gnupg \
@@ -67,9 +67,7 @@ success "System updated"
 
 info "Installing Docker"
 
-sleep 5
-
-apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
+apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::Lock::Timeout=60 install -yq \
   docker-ce \
   docker-ce-cli \
   containerd.io \

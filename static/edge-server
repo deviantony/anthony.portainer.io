@@ -46,14 +46,12 @@ printSection "Installing system requirements"
 curl -SsL https://packages.httpie.io/deb/KEY.gpg | apt-key add -
 curl -SsL -o /etc/apt/sources.list.d/httpie.list https://packages.httpie.io/deb/httpie.list
 
-apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
+apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::Lock::Timeout=60 install -yq \
   uuid-runtime \
   httpie \
   jq
 
 printSection "Installing Docker via script"
-
-sleep 5
 
 curl https://anthony.portainer.io/docker | bash
 
