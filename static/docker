@@ -48,6 +48,8 @@ apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
   ca-certificates \
   curl \
   gnupg \
+  uuid-runtime \
+  httpie \
   lsb-release
 
 success "System updated"
@@ -69,6 +71,8 @@ apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
   docker-ce-cli \
   containerd.io \
   docker-compose-plugin
+
+[[ $? -eq 0 ]] || errorAndExit "Docker installation failed"
 
 success "Docker installed"
 
