@@ -52,6 +52,8 @@ apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
   httpie \
   lsb-release
 
+[[ $? -eq 0 ]] || errorAndExit "System package installation failed. Retry later."
+
 success "System updated"
 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
@@ -71,8 +73,6 @@ apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
   docker-ce-cli \
   containerd.io \
   docker-compose-plugin
-
-[[ $? -eq 0 ]] || errorAndExit "Docker installation failed"
 
 success "Docker installed"
 
