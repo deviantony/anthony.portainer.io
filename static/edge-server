@@ -4,6 +4,7 @@
 # Also configures the Portainer instance to acts as an Edge server
 # Must run with sudo privileges
 
+version="v1.0.2"
 set -e
 
 # logging
@@ -42,7 +43,7 @@ if [[ $(id -u) -ne 0 ]]; then
   errorAndExit "Please run this script with sudo privileges."
 fi
 
-info "Edge server setup script v1.0.1"
+info "Edge server setup script ${version}"
 
 printSection "Installing system requirements"
 
@@ -84,8 +85,6 @@ success "Portainer deployed"
 printSection "Configuring Portainer"
 
 sleep 3
-
-password="deac736b-12f0-418b-ba3e-8a98867b58c5"
 
 jwt=$(http --ignore-stdin --verify=no POST \
   "https://localhost:9443/api/auth" \
