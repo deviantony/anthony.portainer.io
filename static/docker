@@ -49,7 +49,6 @@ apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
   curl \
   gnupg \
   uuid-runtime \
-  httpie \
   lsb-release
 
 [[ $? -eq 0 ]] || errorAndExit "System package installation failed. Retry later."
