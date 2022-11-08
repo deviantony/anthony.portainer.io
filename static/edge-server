@@ -84,24 +84,24 @@ printSection "Configuring Portainer"
 
 sleep 3
 
-jwt=$(http --verify=no POST \
+jwt=$(http --ignore-stdin --verify=no POST \
   "https://localhost:9443/api/auth" \
   username="admin" \
   password="${password}" | jq -r '.jwt')
 
-api_token=$(http --verify=no POST \
+api_token=$(http --ignore-stdin --verify=no POST \
   "https://localhost:9443/api/users/1/tokens" \
   "Authorization: Bearer ${jwt}" \
   description="edge-server-bootstrap-token" | jq -r '.rawAPIKey')
 
 ip_addr=$(ip route get 1.2.3.4 | awk '{printf "%s" , $7 }')
 
-http --quiet --verify=no PUT \
+http --ignore-stdin --quiet --verify=no PUT \
   "https://localhost:9443/api/settings" \
   "Authorization: Bearer ${jwt}" \
   EdgePortainerURL="https://${ip_addr}:9443"
 
-edge_key=$(http --verify=no POST \
+edge_key=$(http --ignore-stdin --verify=no POST \
   "https://localhost:9443/api/endpoints/edge/generate-key" \
   "Authorization: Bearer ${jwt}" | jq -r '.edgeKey')
 
@@ -109,7 +109,7 @@ success "Portainer successfully configured"
 
 info "\n"
 info "Use the following URL to access the Portainer instance:\n"
-info "https://{ip_addr}:9443"
+info "https://${ip_addr}:9443"
 info "Portainer password: ${password}"
 info "\n"
 
