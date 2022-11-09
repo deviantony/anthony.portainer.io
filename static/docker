@@ -3,7 +3,7 @@
 # Install Docker and Compose on Ubuntu
 # Must run with sudo privileges
 
-version="v1.0.2"
+version="v1.0.3"
 set -e
 
 # logging
@@ -47,9 +47,9 @@ info "Docker setup script ${version}"
 printSection "Installing Docker"
 info "Installing Docker prerequisites"
 
-apt -o DPkg::Lock::Timeout=60 update 
+apt-get -o dpkg::lock::timeout=-1 update 
 
-DEBIAN_FRONTEND=noninteractive apt -o DPkg::Lock::Timeout=60 install -yq \
+DEBIAN_FRONTEND=noninteractive apt-get -o dpkg::lock::timeout=-1 install -yq \
   ca-certificates \
   curl \
   gnupg \
@@ -72,9 +72,9 @@ success "System updated"
 
 info "Installing Docker"
 
-apt -o DPkg::Lock::Timeout=60 update 
+apt-get -o dpkg::lock::timeout=-1 update 
 
-DEBIAN_FRONTEND=noninteractive apt -o DPkg::Lock::Timeout=60 install -yq \
+DEBIAN_FRONTEND=noninteractive -get -o dpkg::lock::timeout=-1 install -yq \
   docker-ce \
   docker-ce-cli \
   containerd.io \
