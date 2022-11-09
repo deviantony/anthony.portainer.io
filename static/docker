@@ -3,7 +3,7 @@
 # Install Docker and Compose on Ubuntu
 # Must run with sudo privileges
 
-version="v1.0.3"
+version="v1.0.4"
 set -e
 
 # logging
@@ -74,7 +74,7 @@ info "Installing Docker"
 
 apt-get -o dpkg::lock::timeout=-1 update 
 
-DEBIAN_FRONTEND=noninteractive -get -o dpkg::lock::timeout=-1 install -yq \
+DEBIAN_FRONTEND=noninteractive apt-get -o dpkg::lock::timeout=-1 install -yq \
   docker-ce \
   docker-ce-cli \
   containerd.io \
