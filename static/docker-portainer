@@ -3,7 +3,7 @@
 # Install latest Portainer BE server on top of a Docker installation (see docker script)
 # Must run with sudo privileges
 
-version="v1.0.0"
+version="v1.0.1"
 set -e
 
 # logging
@@ -61,6 +61,7 @@ docker run -d \
   -p 8000:8000 \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v portainer_data:/data \
+  -v /tmp/portainer_password:/tmp/portainer_password \
   --restart=always \
   --name portainer \
   portainer/portainer-ee:latest \
