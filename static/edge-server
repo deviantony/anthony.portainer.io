@@ -4,7 +4,7 @@
 # Also configures the Portainer instance to acts as an Edge server
 # Must run with sudo privileges
 
-version="v1.0.4"
+version="v1.0.5"
 set -e
 
 # logging
@@ -50,9 +50,9 @@ printSection "Installing system requirements"
 curl -SsL https://packages.httpie.io/deb/KEY.gpg | apt-key add -
 curl -SsL -o /etc/apt/sources.list.d/httpie.list https://packages.httpie.io/deb/httpie.list
 
-apt-get -o DPkg::Lock::Timeout=60 update
+apt -o DPkg::Lock::Timeout=60 update
 
-DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::Lock::Timeout=60 install -yq \
+DEBIAN_FRONTEND=noninteractive apt -o DPkg::Lock::Timeout=60 install -yq \
   uuid-runtime \
   httpie \
   jq
