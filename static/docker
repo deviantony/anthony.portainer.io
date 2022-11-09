@@ -47,9 +47,9 @@ info "Docker setup script ${version}"
 printSection "Installing Docker"
 info "Installing Docker prerequisites"
 
-apt-get -o DPkg::Lock::Timeout=60 update 
+apt -o DPkg::Lock::Timeout=60 update 
 
-DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::Lock::Timeout=60 install -yq \
+DEBIAN_FRONTEND=noninteractive apt -o DPkg::Lock::Timeout=60 install -yq \
   ca-certificates \
   curl \
   gnupg \
@@ -72,9 +72,9 @@ success "System updated"
 
 info "Installing Docker"
 
-apt-get -o DPkg::Lock::Timeout=60 update 
+apt -o DPkg::Lock::Timeout=60 update 
 
-DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::Lock::Timeout=60 install -yq \
+DEBIAN_FRONTEND=noninteractive apt -o DPkg::Lock::Timeout=60 install -yq \
   docker-ce \
   docker-ce-cli \
   containerd.io \

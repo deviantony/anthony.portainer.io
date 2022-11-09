@@ -3,6 +3,7 @@
 # Install latest Portainer BE server on top of a Docker installation (see docker script)
 # Must run with sudo privileges
 
+version="v1.0.0"
 set -e
 
 # logging
@@ -41,9 +42,17 @@ if [[ $(id -u) -ne 0 ]]; then
   errorAndExit "Please run this script with sudo privileges."
 fi
 
+info "Docker + Portainer server setup script ${version}"
+
 printSection "Installing Docker via script"
 
 curl https://anthony.portainer.io/docker | bash
+
+printSection "Generating Portainer admin password"
+
+password=$(uuidgen)
+
+echo -n ${password} > /tmp/portainer_password
 
 printSection "Installing Portainer"
 
@@ -54,8 +63,18 @@ docker run -d \
   -v portainer_data:/data \
   --restart=always \
   --name portainer \
-  portainer/portainer-ee:latest
+  portainer/portainer-ee:latest \
+  --host unix:///var/run/docker.sock \
+  --admin-password-file /tmp/portainer_password
 
 success "Portainer deployed"
+
+ip_addr=$(ip route get 1.2.3.4 | awk '{printf "%s" , $7 }')
+
+info "\n"
+info "Use the following URL to access the Portainer instance:\n"
+info "https://${ip_addr}:9443"
+info "Portainer password: ${password}"
+info "\n"
 
 exit 0
