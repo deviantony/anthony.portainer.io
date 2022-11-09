@@ -3,7 +3,7 @@
 # Install Docker and Compose on Ubuntu
 # Must run with sudo privileges
 
-version="v1.0.1"
+version="v1.0.2"
 set -e
 
 # logging
