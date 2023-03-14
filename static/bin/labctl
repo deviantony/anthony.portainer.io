@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Install the vps binary
+# Install the labctl binary
 # Must run with sudo privileges
 
 set -e
@@ -41,7 +41,7 @@ if [[ $(id -u) -ne 0 ]]; then
   errorAndExit "Please run this script with sudo privileges."
 fi
 
-printSection "Installing vps binary"
+printSection "Installing labctl binary"
 info "Dowloading and installing binary"
 
 case $(uname | tr '[:upper:]' '[:lower:]') in
@@ -56,9 +56,9 @@ case $(uname | tr '[:upper:]' '[:lower:]') in
 esac
 
 rm -f /usr/local/bin/vps
-curl -L https://github.com/deviantony/anthony.portainer.io/releases/download/bin/vps-${PLATFORM}-${ARCH} -o /usr/local/bin/vps
-chmod 755 /usr/local/bin/vps
+curl -L https://github.com/deviantony/anthony.portainer.io/releases/download/bin/labctl-${PLATFORM}-${ARCH} -o /usr/local/bin/labctl
+chmod 755 /usr/local/bin/labctl
 
-success "vps binary successfully installed"
+success "labtcl binary successfully installed"
 
 exit 0
