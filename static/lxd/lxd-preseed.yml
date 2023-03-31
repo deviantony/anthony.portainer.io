@@ -1,0 +1,110 @@
+# Daemon settings
+config:
+  core.https_address: '[::]:8443'
+  core.trust_password: test # @@PASSWD
+
+# Storage pools
+storage_pools:
+- name: data
+  driver: zfs
+- name: docker-data
+  driver: btrfs
+
+# Network devices
+networks:
+- config:
+    ipv4.address: auto
+    ipv6.address: none
+  description: ""
+  name: lxdbr0
+  type: "bridge"
+  project: default
+
+# Profiles
+profiles:
+- name: default
+  devices:
+    eth0:
+      name: eth0
+      network: lxdbr0
+      type: nic
+    root:
+      path: /
+      pool: data
+      type: disk
+- name: labctl-flask-xs
+  description: "Lab profile (XS)"
+  config:
+    limits.cpu: 1
+    limits.memory: 512M
+    security.nesting: true
+    security.syscalls.intercept.mknod: true
+    security.syscalls.intercept.setxattr: true
+  devices:
+    eth0:
+      name: eth0
+      type: nic
+      nictype: macvlan
+      parent: eno1 # @@NIC
+    root:
+      type: disk
+      path: /
+      pool: data
+      size: 10GB
+- name: labctl-flask-s
+  description: "Lab profile (S)"
+  config:
+    limits.cpu: 1
+    limits.memory: 1GB
+    security.nesting: true
+    security.syscalls.intercept.mknod: true
+    security.syscalls.intercept.setxattr: true
+  devices:
+    eth0:
+      name: eth0
+      type: nic
+      nictype: macvlan
+      parent: eno1 # @@NIC
+    root:
+      type: disk
+      path: /
+      pool: data
+      size: 10GB
+- name: labctl-flask-m
+  description: "Lab profile (M)"
+  config:
+    limits.cpu: 2
+    limits.memory: 2GB
+    security.nesting: true
+    security.syscalls.intercept.mknod: true
+    security.syscalls.intercept.setxattr: true
+  devices:
+    eth0:
+      name: eth0
+      type: nic
+      nictype: macvlan
+      parent: eno1 # @@NIC
+    root:
+      type: disk
+      path: /
+      pool: data
+      size: 20GB
+- name: labctl-flask-l
+  description: "Lab profile (L)"
+  config:
+    limits.cpu: 4
+    limits.memory: 4GB
+    security.nesting: true
+    security.syscalls.intercept.mknod: true
+    security.syscalls.intercept.setxattr: true
+  devices:
+    eth0:
+      name: eth0
+      type: nic
+      nictype: macvlan
+      parent: eno1 # @@NIC
+    root:
+      type: disk
+      path: /
+      pool: data
+      size: 50GB
