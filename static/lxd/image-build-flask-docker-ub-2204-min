@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # Setup the LXD flask-docker image
+# Valid for Ubuntu 22.04 minimal cloud
 # Must run with sudo privileges
 
 version="v1.0.0"
@@ -59,7 +60,6 @@ success "System updated"
 
 printSection "Configuring OpenSSH"
 
-mkdir .ssh
 chmod 700 .ssh
 systemctl enable --now ssh
 

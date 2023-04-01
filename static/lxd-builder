@@ -61,6 +61,11 @@ printSection "Installing LXD"
 
 snap install lxd
 
+printSection "Configuring LXD"
+
+lxd init --minimal
+lxc remote add --protocol simplestreams ubuntu-minimal https://cloud-images.ubuntu.com/minimal/releases/
+
 success "LXD ready to be used"
 
 exit 0
