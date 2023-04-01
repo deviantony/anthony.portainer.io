@@ -108,3 +108,16 @@ profiles:
       path: /
       pool: data
       size: 50GB
+- name: lxc-image-builder
+  description: "LXC image builder profile"
+  config:
+    security.nesting: true
+  devices:
+    eth0:
+      name: eth0
+      network: lxdbr0
+      type: nic
+    root:
+      path: /
+      pool: data
+      type: disk

@@ -69,6 +69,11 @@ info "LXD init"
 
 lxd init --preseed < /tmp/lxd-preseed.yml
 
+info "Importing base images"
+
+curl https://downloads.portainer.io/alapenna-flask-docker-ub-2204-min.tar.gz > /tmp/flask-docker-ub-2204-min.tar.gz
+lxc image import /tmp/flask-docker-ub-2204-min.tar.gz --alias flask-docker
+
 success "LXD ready to be used"
 
 exit 0
