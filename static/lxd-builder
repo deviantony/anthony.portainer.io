@@ -61,14 +61,6 @@ printSection "Installing LXD"
 
 snap install lxd
 
-info "Retrieving LXD pre-seed config"
-
-curl https://anthony.portainer.io/lxd/lxd-preseed.yml > /tmp/lxd-preseed.yml
-
-info "LXD init"
-
-lxd init --preseed < /tmp/lxd-preseed.yml
-
 success "LXD ready to be used"
 
 exit 0

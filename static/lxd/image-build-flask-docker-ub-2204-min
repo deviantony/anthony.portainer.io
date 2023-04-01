@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Install LXD lab
+# Setup the LXD flask-docker image
 # Must run with sudo privileges
 
 version="v1.0.0"
@@ -38,7 +38,7 @@ if [[ $(id -u) -ne 0 ]]; then
   errorAndExit "Please run this script with sudo privileges."
 fi
 
-info "LXD server setup script ${version}"
+info "LXD flask-docker image setup script ${version}"
 
 printSection "Installing server tools"
 
@@ -51,24 +51,22 @@ DEBIAN_FRONTEND=noninteractive apt -o DPkg::Lock::Timeout=60 install -yq \
   uuid-runtime \
   lsb-release \
   nano \
-  avahi-daemon
+  openssh-server
 
 [[ $? -eq 0 ]] || errorAndExit "System package installation failed. Retry later."
 
 success "System updated"
 
-printSection "Installing LXD"
+printSection "Configuring OpenSSH"
 
-snap install lxd
+mkdir .ssh
+chmod 700 .ssh
+systemctl enable --now ssh
 
-info "Retrieving LXD pre-seed config"
+printSection "Installing Docker"
 
-curl https://anthony.portainer.io/lxd/lxd-preseed.yml > /tmp/lxd-preseed.yml
+curl https://anthony.portainer.io/docker | bash
 
-info "LXD init"
-
-lxd init --preseed < /tmp/lxd-preseed.yml
-
-success "LXD ready to be used"
+success "LXD image ready to be used"
 
 exit 0
