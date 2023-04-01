@@ -14,7 +14,12 @@ curl https://anthony.portainer.io/docker | sudo bash
 
 ## flask-docker
 
+
+
 ```
 lxc launch ubuntu-minimal:22.04 flask-docker-ub-2204-min
 lxc exec flask-docker-ub-2204-min -- bash -c "curl https://anthony.portainer.io/lxd/image-build-flask-docker-ub-2204-min | bash"
+lxc stop flask-docker-ub-2204-min
+lxc publish flask-docker-ub-2204-min --alias flask-docker
+lxc image export flask-docker flask-docker-ub-2204-min
 ```

@@ -40,23 +40,6 @@ fi
 
 info "LXD server setup script ${version}"
 
-printSection "Installing server tools"
-
-apt -o DPkg::Lock::Timeout=60 update 
-
-DEBIAN_FRONTEND=noninteractive apt -o DPkg::Lock::Timeout=60 install -yq \
-  ca-certificates \
-  curl \
-  gnupg \
-  uuid-runtime \
-  lsb-release \
-  nano \
-  avahi-daemon
-
-[[ $? -eq 0 ]] || errorAndExit "System package installation failed. Retry later."
-
-success "System updated"
-
 printSection "Installing LXD"
 
 snap install lxd
