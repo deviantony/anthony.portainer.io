@@ -64,8 +64,8 @@ curl https://anthony.portainer.io/lxd/lxd-preseed.yml > /tmp/lxd-preseed.yml
 
 info "LXD init"
 
-read -rsp "Server password: " lxd_pwd </dev/tty
-read -p "Network interface used for macvlan: " lxd_nic </dev/tty
+read -rsp "Server password:"$'\n' lxd_pwd </dev/tty
+read -p "Network interface used for macvlan:"$'\n' lxd_nic </dev/tty
 
 sed -i "s/@@PASSWD/${lxd_pwd}/g" /tmp/lxd-preseed.yml
 sed -i "s/@@NIC/${lxd_nic}/g" /tmp/lxd-preseed.yml
