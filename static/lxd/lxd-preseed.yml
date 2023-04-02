@@ -24,8 +24,8 @@ networks:
 profiles:
 - name: default
   devices:
-    eth0:
-      name: eth0
+    veth0:
+      name: veth0
       network: lxdbr0
       type: nic
     root:
@@ -41,8 +41,8 @@ profiles:
     security.syscalls.intercept.mknod: true
     security.syscalls.intercept.setxattr: true
   devices:
-    eth0:
-      name: eth0
+    veth0:
+      name: veth0
       type: nic
       nictype: macvlan
       parent: @@NIC
@@ -60,8 +60,8 @@ profiles:
     security.syscalls.intercept.mknod: true
     security.syscalls.intercept.setxattr: true
   devices:
-    eth0:
-      name: eth0
+    veth0:
+      name: veth0
       type: nic
       nictype: macvlan
       parent: @@NIC
@@ -79,8 +79,8 @@ profiles:
     security.syscalls.intercept.mknod: true
     security.syscalls.intercept.setxattr: true
   devices:
-    eth0:
-      name: eth0
+    veth0:
+      name: veth0
       type: nic
       nictype: macvlan
       parent: @@NIC
@@ -98,8 +98,8 @@ profiles:
     security.syscalls.intercept.mknod: true
     security.syscalls.intercept.setxattr: true
   devices:
-    eth0:
-      name: eth0
+    veth0:
+      name: veth0
       type: nic
       nictype: macvlan
       parent: @@NIC
@@ -113,8 +113,8 @@ profiles:
   config:
     security.nesting: true
   devices:
-    eth0:
-      name: eth0
+    veth0:
+      name: veth0
       network: lxdbr0
       type: nic
     root:
