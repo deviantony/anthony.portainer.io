@@ -1,7 +1,7 @@
 # Daemon settings
 config:
   core.https_address: '[::]:8443'
-  core.trust_password: test # @@PASSWD
+  core.trust_password: @@PASSWD
 
 # Storage pools
 storage_pools:
@@ -45,7 +45,7 @@ profiles:
       name: eth0
       type: nic
       nictype: macvlan
-      parent: eno1 # @@NIC
+      parent: @@NIC
     root:
       type: disk
       path: /
@@ -64,7 +64,7 @@ profiles:
       name: eth0
       type: nic
       nictype: macvlan
-      parent: eno1 # @@NIC
+      parent: @@NIC
     root:
       type: disk
       path: /
@@ -83,7 +83,7 @@ profiles:
       name: eth0
       type: nic
       nictype: macvlan
-      parent: eno1 # @@NIC
+      parent: @@NIC
     root:
       type: disk
       path: /
@@ -102,7 +102,7 @@ profiles:
       name: eth0
       type: nic
       nictype: macvlan
-      parent: eno1 # @@NIC
+      parent: @@NIC
     root:
       type: disk
       path: /

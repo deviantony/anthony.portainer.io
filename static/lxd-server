@@ -45,12 +45,9 @@ printSection "Installing server tools"
 apt -o DPkg::Lock::Timeout=60 update 
 
 DEBIAN_FRONTEND=noninteractive apt -o DPkg::Lock::Timeout=60 install -yq \
-  ca-certificates \
   curl \
-  gnupg \
-  uuid-runtime \
-  lsb-release \
   nano \
+  iputils-ping \
   avahi-daemon
 
 [[ $? -eq 0 ]] || errorAndExit "System package installation failed. Retry later."
@@ -66,6 +63,12 @@ info "Retrieving LXD pre-seed config"
 curl https://anthony.portainer.io/lxd/lxd-preseed.yml > /tmp/lxd-preseed.yml
 
 info "LXD init"
+
+read -rsp "Server password: " lxd_pwd
+read -p "Network interface used for macvlan: " lxd_nic 
+
+sed -i "s/@@PASSWD/${lxd_pwd}/g" /tmp/lxd-preseed.yml
+sed -i "s/@@NIC/${lxd_nic}/g" /tmp/lxd-preseed.yml
 
 lxd init --preseed < /tmp/lxd-preseed.yml
 
