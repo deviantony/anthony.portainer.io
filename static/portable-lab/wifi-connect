@@ -4,7 +4,6 @@
 # Must run with sudo privileges
 
 version="v1.0.0"
-set -e
 
 # logging
 
@@ -40,12 +39,12 @@ info "Configuring WiFi"
 read -p "WiFi SSID:"$'\n' net_ssid </dev/tty
 read -p "WiFi password:"$'\n' net_password </dev/tty
 
-mv /etc/netplan/00-installer-config-wifi.yml /root/00-installer-config-wifi.yml.bak
-tee -a /etc/netplan/00-installer-config-wifi.yml << END
+mv /etc/netplan/00-installer-config-wifi.yaml /root/00-installer-config-wifi.yaml.bak
+tee -a /etc/netplan/00-installer-config-wifi.yaml << END
 # This is the network config written by 'subiquity'
 network:
   wifis:
-    wlp3s0:
+    wlp1s0:
       optional: true
       access-points:
         "${net_ssid}":
@@ -53,6 +52,8 @@ network:
       dhcp4: true
   version: 2
 END
+
+info "WiFi configuration written on disk"
 
 netplan apply
 
