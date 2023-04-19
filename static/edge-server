@@ -102,13 +102,14 @@ ip_addr=$(ip route get 1.2.3.4 | awk '{printf "%s" , $7 }')
 
 http --ignore-stdin --quiet --verify=no PUT \
   "https://localhost:9443/api/settings" \
-  "Authorization: Bearer ${jwt}" \
+  "x-api-key: ${api_token}" \
   EdgePortainerURL="https://${ip_addr}:9443" \
+  Edge:="{\"TunnelServerAddress\": \"${ip_addr}:8000\"}" \
   TrustOnFirstConnect:="true"
 
 edge_key=$(http --ignore-stdin --verify=no POST \
   "https://localhost:9443/api/endpoints/edge/generate-key" \
-  "Authorization: Bearer ${jwt}" | jq -r '.edgeKey')
+  "x-api-key: ${api_token}" | jq -r '.edgeKey')
 
 success "Portainer successfully configured"
 
