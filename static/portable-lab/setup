@@ -59,8 +59,8 @@ printSection "Configuring LAN network config"
 
 info "Network config will be applied at reboot"
 
-curl https://anthony.portainer.io/portable-lab/00-installer-config.yml > /etc/netplan/00-installer-config.yml
-chmod 644 /etc/netplan/00-installer-config.yml
+curl https://anthony.portainer.io/portable-lab/00-installer-config.yaml > /etc/netplan/00-installer-config.yaml
+chmod 644 /etc/netplan/00-installer-config.yaml
 
 curl https://anthony.portainer.io/portable-lab/wifi-connect > /root/wifi-connect
 chmod 744 /root/wifi-connect
