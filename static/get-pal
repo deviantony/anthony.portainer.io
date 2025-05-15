@@ -1,0 +1,81 @@
+#!/bin/bash
+
+# Exit immediately if a command exits with a non-zero status.
+set -e
+
+# Function to display error messages and exit
+error_exit() {
+    echo "ERROR: $1" >&2
+    exit 1
+}
+
+# Detect OS and architecture
+OS=""
+ARCH=""
+case "$(uname -s)" in
+    Linux*)     OS="linux" ;;
+    Darwin*)    OS="darwin" ;;
+    *)          error_exit "Unsupported operating system: $(uname -s)" ;;
+esac
+
+case "$(uname -m)" in
+    x86_64)     ARCH="amd64" ;;
+    arm64)      ARCH="arm64" ;;
+    aarch64)    ARCH="arm64" ;; # Linux arm64 can also be aarch64
+    *)          error_exit "Unsupported architecture: $(uname -m)" ;;
+esac
+
+# Special case for Darwin arm64 (Apple Silicon)
+if [ "$OS" = "darwin" ] && [ "$ARCH" != "arm64" ]; then
+    error_exit "Unsupported architecture for Darwin: $(uname -m). Only arm64 is supported."
+fi
+
+
+# Define download URLs
+BASE_URL="https://anthony.portainer.io"
+VERSION="v0.1.0-alpha"
+BINARY_NAME="pal"
+ARCHIVE_NAME="${BINARY_NAME}-${VERSION}-${OS}-${ARCH}.tar"
+DOWNLOAD_URL="${BASE_URL}/${ARCHIVE_NAME}"
+
+# Check if required tools are installed
+command -v curl >/dev/null 2>&1 || error_exit "curl is required but not installed. Please install curl and try again."
+command -v tar >/dev/null 2>&1 || error_exit "tar is required but not installed. Please install tar and try again."
+
+
+echo "Detected OS: $OS"
+echo "Detected Arch: $ARCH"
+echo "Downloading $BINARY_NAME from $DOWNLOAD_URL..."
+
+# Download the archive
+if ! curl -sfL -o "$ARCHIVE_NAME" "$DOWNLOAD_URL"; then
+    error_exit "Failed to download $ARCHIVE_NAME from $DOWNLOAD_URL"
+fi
+
+echo "Extracting $BINARY_NAME from $ARCHIVE_NAME..."
+# Extract the binary
+if ! tar -xf "$ARCHIVE_NAME" "$BINARY_NAME"; then
+    # Attempt to extract without specifying the binary name if the above fails (some tar versions might behave differently or archive structure)
+    # For now, we assume 'pal' is at the root of the tar.
+    echo "Extraction failed. Cleaning up..."
+    rm -f "$ARCHIVE_NAME"
+    error_exit "Failed to extract $BINARY_NAME from $ARCHIVE_NAME. The archive might be corrupted or the binary name/path inside is unexpected."
+fi
+
+echo "Cleaning up..."
+# Remove the archive
+if ! rm -f "$ARCHIVE_NAME"; then
+    echo "Warning: Failed to remove $ARCHIVE_NAME. You may need to remove it manually."
+fi
+
+echo "Making $BINARY_NAME executable..."
+# Make the binary executable
+if ! chmod +x "$BINARY_NAME"; then
+    error_exit "Failed to make $BINARY_NAME executable. Please check permissions."
+fi
+
+echo ""
+echo "$BINARY_NAME installed successfully!"
+echo "Run it with: ./$BINARY_NAME"
+
+exit 0 
