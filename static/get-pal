@@ -33,7 +33,7 @@ fi
 
 # Define download URLs
 BASE_URL="https://anthony.portainer.io"
-VERSION="v0.1.0-alpha"
+VERSION="v0.1.1-alpha"
 BINARY_NAME="pal"
 ARCHIVE_NAME="${BINARY_NAME}-${VERSION}-${OS}-${ARCH}.tar"
 DOWNLOAD_URL="${BASE_URL}/${ARCHIVE_NAME}"
